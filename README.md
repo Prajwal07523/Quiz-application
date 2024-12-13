@@ -47,10 +47,10 @@ python manage.py runserver
 ```
 
  ```markdown
-![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/main/media/Home.png)
-![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/main/media/Question.png)
-![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/main/media/Result.png)
-![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/main/media/Result2.png)
+![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/bea25a2a05c7393290aa0ce6bcf79f5421d88bee/media/Home.png)
+![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/bea25a2a05c7393290aa0ce6bcf79f5421d88bee/media/Question.png)
+![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/bea25a2a05c7393290aa0ce6bcf79f5421d88bee/media/Result.png)
+![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/bea25a2a05c7393290aa0ce6bcf79f5421d88bee/media/Result2.png)
 
 
 
