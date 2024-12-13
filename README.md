@@ -17,10 +17,11 @@ To keep the project dependencies isolated, create a virtual environment:
 
 ```bash
 python -m venv myenv
-```bash
+bash```
+
 ```bash
 myenv\Scripts\activate
-```bash
+bash ```
 
 ### Step 2:
 
