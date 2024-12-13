@@ -46,14 +46,16 @@ python manage.py startapp quiz
 python manage.py runserver
 ```
 
+ ```markdown
+![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/main/media/Home.png)
+![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/main/media/Question.png)
+![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/main/media/Result.png)
+![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/main/media/Result2.png)
 
 
 
 
 
-
-
-# python manage.py startapp quiz
 
 
 
