@@ -18,28 +18,39 @@ To keep the project dependencies isolated, create a virtual environment:
 ```bash
 python -m venv myenv
 
+```
 ```bash
 myenv\Scripts\activate
+```
+
+### Step 2:Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### Step 3:Set Up the Database
+```bash
+python manage.py makemigrations
+python manage.py migrate
+python manage.py createsuperuser
+```
 
 
-### Step 2:
+### Step 4: Create a Django App
+```bash
+python manage.py startapp quiz
+```
+
+### Step 5:Run the Development Server
+```bash
+python manage.py runserver
+```
 
 
-# python -m venv myenv
-# myenv\Scripts\activate
-# pip install django
-# pip freeze > requirements.txt
-# python -m django startproject myproject
-
-# cd myproject
-# python manage.py runserver
 
 
-# Database Setup
-# python manage.py makemigrations
-# python manage.py migrate
 
-# python manage.py createsuperuser
+
 
 
 # python manage.py startapp quiz
