@@ -1,4 +1,24 @@
-# Django-Quiz-application
+
+# Django Quiz Application
+
+This is a simple Django-based quiz application that allows users to take a quiz, with questions and answers stored in the database.
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+- **Python 3.6 or higher**
+- **pip** (Python package manager)
+
+## Project Setup
+
+### Step 1: Set up a Virtual Environment
+
+To keep the project dependencies isolated, create a virtual environment:
+
+```bash
+python -m venv myenv
+
+
 
 # python -m venv myenv
 # myenv\Scripts\activate
