@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #ccbcbc;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align the container to the top */
+            min-height: 100%; /* Allow body to grow dynamically with content */
+        }
+
+        .container {
+            width: 70%;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: visible; /* Ensure content overflow does not create scrollbars */
+            padding: 20px;
+            transform: scale(0.98);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1);
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            margin-bottom: 20px;
+            color: #9a1010;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        /* Status Text */
+        #status {
+            font-size: 1.2rem;
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        /* Quiz Section */
+        #quiz {
+            padding: 20px;
+        }
+
+        #question-container {
+            display: none;
+        }
+
+        #question {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: #444;
+            text-align: center;
+        }
+
+        .options button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .options button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Finish Quiz Button */
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        /* Summary Section */
+        #summary-container {
+            display: none;
+            padding: 20px;
+        }
+
+        .summary-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .summary-box.total {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .summary-box.correct {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .summary-box.incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .question-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .question-box .question-text {
+            font-weight: bold;
+            color: #444;
+            margin-bottom: 5px;
+        }
+
+        .question-box .user-answer {
+            color: #007bff;
+        }
+
+        .question-box .correct-text {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .question-box .incorrect-text {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .option {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .correct-option {
+            background-color: #d4edda; /* Light green */
+            color: #155724;
+        }
+
+        .wrong-option {
+            background-color: #f8d7da; /* Light red */
+            color: #721c24;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Online Quiz App</h1>
+        <div id="quiz">
+            <button onclick="startQuiz()">Start Quiz</button>
+            <p id="status"></p>
+            <div id="question-container">
+                <p id="question"></p>
+                <div id="options" class="options"></div>
+                <button onclick="getSummary()">Finish Quiz</button>
+            </div>
+        </div>
+        <div id="summary-container">
+            <h2>Quiz Summary</h2>
+            <p id="summary"></p>
+        </div>
+    </div>
+
+    <script>
+        let sessionId = null;
+        let sessionEntryId = null;
+
+        async function startQuiz() {
+            try {
+                const response = await fetch('/start/');
+                const data = await response.json();
+                sessionId = data.session_id;
+                document.getElementById('status').innerText = "Quiz started!";
+                document.getElementById('question-container').style.display = "block";
+                document.getElementById('summary-container').style.display = "none";
+                getQuestion();
+            } catch (error) {
+                document.getElementById('status').innerText = "Error starting quiz.";
+            }
+        }
+
+        async function getQuestion() {
+            try {
+                const response = await fetch(`/question/?session_id=${sessionId}`);
+                const data = await response.json();
+                if (data.error) {
+                    document.getElementById('status').innerText = data.error;
+                    return;
+                }
+
+                sessionEntryId = data.id;
+                document.getElementById('question').innerText = data.text;
+                const optionsContainer = document.getElementById('options');
+                optionsContainer.innerHTML = `
+                    <button onclick="submitAnswer('A')" class="option">${data.options.A}</button>
+                    <button onclick="submitAnswer('B')" class="option">${data.options.B}</button>
+                    <button onclick="submitAnswer('C')" class="option">${data.options.C}</button>
+                    <button onclick="submitAnswer('D')" class="option">${data.options.D}</button>
+                `;
+            } catch (error) {
+                document.getElementById('status').innerText = "Error fetching question.";
+            }
+        }
+
+        async function submitAnswer(answer) {
+            try {
+                const response = await fetch(`/submit/?session_id=${sessionId}&session_entry_id=${sessionEntryId}&answer=${answer}`);
+                const data = await response.json();
+                document.getElementById('status').innerText = data.is_correct
+                    ? "Correct Answer!"
+                    : "Incorrect Answer!";
+                getQuestion();
+            } catch (error) {
+                document.getElementById('status').innerText = "Error submitting answer.";
+            }
+        }
+
+        async function getSummary() {
+            try {
+                const response = await fetch(`/summary/?session_id=${sessionId}`);
+                const data = await response.json();
+
+                const summaryContainer = document.getElementById('summary-container');
+                summaryContainer.style.display = "block";
+
+                // Display summary
+                const summaryHTML = `
+                    <div class="summary-box total">Total Questions: ${data.total_questions}</div>
+                    <div class="summary-box correct">Correct Answers: ${data.correct_answers}</div>
+                    <div class="summary-box incorrect">Incorrect Answers: ${data.incorrect_answers}</div>
+                `;
+
+                // Display details with highlighted options
+                const detailsHTML = data.details.map(detail => {
+                    // Generate options with highlighting
+                    const optionsHTML = Object.keys(detail.options).map(option => {
+                        const isCorrect = option === detail.correct_option;
+                        const isUserAnswer = option === detail.user_answer;
+                        const optionClass = isCorrect
+                            ? 'correct-option'
+                            : isUserAnswer
+                            ? 'wrong-option'
+                            : '';
+
+                        return `
+                            <div class="option ${optionClass}">
+                                ${option}: ${detail.options[option]}
+                            </div>
+                        `;
+                    }).join("");
+
+                    return `
+                        <div class="question-box">
+                            <p class="question-text">Question: ${detail.question}</p>
+                            <p>Your Answer: <span class="user-answer">${detail.user_answer || "Not Answered"}</span></p>
+                            <p>${detail.is_correct
+                                ? '<span class="correct-text">Correct!</span>'
+                                : '<span class="incorrect-text">Incorrect</span>'}
+                            </p>
+                            <div class="options">
+                                ${optionsHTML}
+                            </div>
+                        </div>
+                    `;
+                }).join("");
+
+                document.getElementById('summary').innerHTML = summaryHTML + detailsHTML;
+                document.getElementById('question-container').style.display = "none";
+            } catch (error) {
+                document.getElementById('status').innerText = "Error fetching summary.";
+            }
+        }
+    </script>
+</body>
+</html>
