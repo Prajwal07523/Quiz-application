@@ -46,6 +46,7 @@ python manage.py startapp quiz
 python manage.py runserver
 ```
 
+#### https://quiz-application-lake.vercel.app/
 
 ![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/bea25a2a05c7393290aa0ce6bcf79f5421d88bee/media/Home.png)
 ![Alt text](https://github.com/Prajwal07523/Quiz-application/blob/bea25a2a05c7393290aa0ce6bcf79f5421d88bee/media/Question.png)
